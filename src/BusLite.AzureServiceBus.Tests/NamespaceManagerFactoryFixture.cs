@@ -13,10 +13,10 @@
             _factory = new AzureServiceBusNamespaceManagerFactory();
             using (var sr = new StreamReader("AzureServiceBusCredentials.txt"))
             {
-                _azureCredentials = sr.ReadToEnd();
-                if (_azureCredentials == "SharedSecretIssuer=owner;SharedSecretValue=secret")
+                _azureCredentials = sr.ReadLine();
+                if (_azureCredentials == "sb://[yourtestnamespace].servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret")
                 {
-                    throw new Exception("Dude, you need to put your azure credentials in AzureServiceBusCredentials.txt else no-go.");
+                    throw new Exception("Dude, you need to put your azure credentials in AzureServiceBusCredentials.txt else no-go!");
                 }
             }
         }
@@ -29,13 +29,13 @@
         public INamespaceManager CreateNamespaceManager()
         {
             return _factory
-               .Create("sb://damotest.servicebus.windows.net/;" + _azureCredentials);
+               .Create(_azureCredentials);
         }
 
         public INamespaceManager CreateNamespaceManagerThatDoesNotExist()
         {
             return _factory
-               .Create("sb://shouldnotexistever.servicebus.windows.net/;" + _azureCredentials);
+               .Create("sb://shouldnotexistever.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
         }
     }
 }
