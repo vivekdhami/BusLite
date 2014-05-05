@@ -2,6 +2,6 @@
 {
     public interface INamespaceManagerFactory
     {
-        INamespaceManager Create(string address);
+        INamespaceManager CreateFromConnectionString(string connectionString);
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace BusLite.AzureServiceBus
 {
     using System;
-    using System.IO;
+    using Microsoft.WindowsAzure;
 
     public class NamespaceManagerFactoryFixture
     {
@@ -11,13 +11,10 @@
         public NamespaceManagerFactoryFixture()
         {
             _factory = new AzureServiceBusNamespaceManagerFactory();
-            using (var sr = new StreamReader("AzureServiceBusCredentials.txt"))
+            _azureCredentials = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
+            if (_azureCredentials.Contains("[your namespace]"))
             {
-                _azureCredentials = sr.ReadLine();
-                if (_azureCredentials == "sb://[yourtestnamespace].servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret")
-                {
-                    throw new Exception("Dude, you need to put your azure credentials in AzureServiceBusCredentials.txt else no-go!");
-                }
+                throw new Exception("Dude, you need to put your azure credentials in app.config else no-go!");
             }
         }
 
@@ -29,13 +26,13 @@
         public INamespaceManager CreateNamespaceManager()
         {
             return _factory
-               .Create(_azureCredentials);
+               .CreateFromConnectionString(_azureCredentials);
         }
 
         public INamespaceManager CreateNamespaceManagerThatDoesNotExist()
         {
             return _factory
-               .Create("sb://shouldnotexistever.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
+               .CreateFromConnectionString("sb://shouldnotexistever.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
         }
     }
 }

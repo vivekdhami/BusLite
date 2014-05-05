@@ -9,7 +9,7 @@
             _bus = bus;
         }
 
-        public INamespaceManager Create(string address)
+        public INamespaceManager CreateFromConnectionString(string connectionString)
         {
             return new InMemoryNamespaceManager();
         }
