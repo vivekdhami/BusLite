@@ -14,7 +14,7 @@
             _azureCredentials = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
             if (_azureCredentials.Contains("[your namespace]"))
             {
-                throw new Exception("Dude, you need to put your azure credentials in app.config else no-go!");
+                throw new Exception("Dude, you need to put your azure credentials in app.config else no-go! Also, don't commit your crdentials to git.");
             }
         }
 
@@ -31,8 +31,14 @@
 
         public INamespaceManager CreateNamespaceManagerThatDoesNotExist()
         {
-            return _factory
-               .CreateFromConnectionString("sb://shouldnotexistever.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
+            int i = _azureCredentials.IndexOf("//", StringComparison.Ordinal) + 2;
+            int j = _azureCredentials.IndexOf(".", i, StringComparison.Ordinal);
+
+            // This should result in something like "Endpoint=sb://shouldnotexistever.servicebus.windows.net/....."
+            var credentials = _azureCredentials.Replace(_azureCredentials.Substring(i, j - i), "shouldnotexistever");
+
+            Console.WriteLine(_azureCredentials.Substring(i, j-i));
+            return _factory.CreateFromConnectionString(credentials);
         }
     }
 }
