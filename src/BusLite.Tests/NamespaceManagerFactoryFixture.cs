@@ -21,13 +21,7 @@
         public INamespaceManager CreateNamespaceManager()
         {
             return _factory
-               .CreateFromConnectionString("sb://buslite.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
-        }
-
-        public INamespaceManager CreateNamespaceManagerThatDoesNotExist()
-        {
-            return _factory
-               .CreateFromConnectionString("sb://shouldnotexistever.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
+               .CreateFromConnectionString("Endpoint://buslite.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
         }
     }
 }

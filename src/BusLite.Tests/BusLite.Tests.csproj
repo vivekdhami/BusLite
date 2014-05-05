@@ -55,7 +55,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectivityTests.cs" />
     <Compile Include="NamespaceManagerFactoryFixture.cs" />
     <Compile Include="NamespaceManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
