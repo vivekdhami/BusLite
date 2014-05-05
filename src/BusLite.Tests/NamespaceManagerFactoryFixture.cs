@@ -8,7 +8,9 @@
 
         public NamespaceManagerFactoryFixture()
         {
-            _factory = new InMemoryNamespaceManagerFactory(new ServiceBus());
+            ServiceBus serviceBus = new ServiceBus()
+                .WithNamespace("buslite");
+            _factory = new InMemoryNamespaceManagerFactory(serviceBus);
         }
 
         public INamespaceManagerFactory Factory
@@ -19,7 +21,7 @@
         public INamespaceManager CreateNamespaceManager()
         {
             return _factory
-               .CreateFromConnectionString("sb://damotest.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
+               .CreateFromConnectionString("sb://buslite.servicebus.windows.net/;SharedSecretIssuer=owner;SharedSecretValue=secret");
         }
 
         public INamespaceManager CreateNamespaceManagerThatDoesNotExist()
