@@ -90,7 +90,7 @@ namespace BusLite
 
             if (!await namespaceManager.SubscriptionExists(path, "AllMessages"))
             {
-                await namespaceManager.CreateSubscription(path, ruleDescription: "AllMessages");
+                await namespaceManager.CreateSubscription(path, "AllMessages");
             }
         }
 
