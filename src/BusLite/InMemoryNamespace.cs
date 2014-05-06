@@ -1,10 +1,11 @@
-﻿namespace BusLite.InMemory
+﻿namespace BusLite
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using BusLite.Messaging;
     using Microsoft.ServiceBus.Messaging;
 
     internal class InMemoryNamespace : INamespaceManager
@@ -16,12 +17,12 @@
             return Task.FromResult(_topics.ContainsKey(path));
         }
 
-        public Task<TopicDescription> CreateTopic(string path)
+        public Task<ITopicDescription> CreateTopic(string path)
         {
-            return CreateTopic(new TopicDescription(path));
+            return CreateTopic(new BusLiteTopicDescription(path));
         }
 
-        public Task<TopicDescription> CreateTopic(TopicDescription description)
+        public Task<ITopicDescription> CreateTopic(ITopicDescription description)
         {
             Topic topic = _topics.GetOrAdd(description.Path, _ => new Topic(description));
             return Task.FromResult(topic.Description);
@@ -34,7 +35,7 @@
             return Task.FromResult(0);
         }
 
-        public Task<TopicDescription> GetTopic(string path)
+        public Task<ITopicDescription> GetTopic(string path)
         {
             Topic topic;
             if (_topics.TryGetValue(path, out topic))
@@ -44,32 +45,33 @@
             throw new MessagingEntityNotFoundException(path);
         }
 
-        public Task<IEnumerable<TopicDescription>> GetTopics(string filter = null)
+        public Task<IEnumerable<ITopicDescription>> GetTopics(string filter = null)
         {
             return Task.FromResult(_topics.Values.Select(t => t.Description));
         }
 
-        public Task<TopicDescription> UpdateTopic(TopicDescription description)
+        public Task<ITopicDescription> UpdateTopic(ITopicDescription description)
         {
             Topic topic;
             if (!_topics.TryGetValue(description.Path, out topic))
             {
                 throw new ArgumentException("Topic does not exist");
             }
-            topic.Description = description;
+            
+            topic.Description = new BusLiteTopicDescription(description);
             return Task.FromResult(topic.Description);
         }
 
         private class Topic
         {
-            private TopicDescription _topicDescription;
+            private ITopicDescription _topicDescription;
 
-            public Topic(TopicDescription topicDescription)
+            public Topic(ITopicDescription topicDescription)
             {
                 _topicDescription = topicDescription;
             }
 
-            public TopicDescription Description
+            public ITopicDescription Description
             {
                 get { return _topicDescription; }
                 set { _topicDescription = value; }

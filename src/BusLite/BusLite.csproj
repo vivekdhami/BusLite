@@ -56,11 +56,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InMemory\InMemoryNamespace.cs" />
-    <Compile Include="InMemory\InMemoryServiceBus.cs" />
+    <Compile Include="InMemoryNamespace.cs" />
+    <Compile Include="InMemoryServiceBus.cs" />
     <Compile Include="INamespaceManager.cs" />
     <Compile Include="INamespaceManagerFactory.cs" />
-    <Compile Include="InMemory\InMemoryNamespaceManagerFactory.cs" />
+    <Compile Include="InMemoryNamespaceManagerFactory.cs" />
+    <Compile Include="Messaging\ITopicDescription.cs" />
+    <Compile Include="Messaging\BusLiteTopicDescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

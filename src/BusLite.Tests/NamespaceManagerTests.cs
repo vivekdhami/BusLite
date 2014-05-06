@@ -6,6 +6,7 @@ namespace BusLite
 {
     using System;
     using System.Threading.Tasks;
+    using BusLite.Messaging;
     using FluentAssertions;
     using Microsoft.ServiceBus.Messaging;
     using Xunit;
@@ -26,7 +27,7 @@ namespace BusLite
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
             const string path = "test/createtopic";
-            TopicDescription description = await namespaceManager.CreateTopic(path);
+            ITopicDescription description = await namespaceManager.CreateTopic(path);
 
             description.Path.Should().Be(path);
         }
@@ -61,7 +62,7 @@ namespace BusLite
             const string path = "test/topicexists";
             await namespaceManager.CreateTopic(path);
 
-            TopicDescription description = await namespaceManager.GetTopic(path);
+            ITopicDescription description = await namespaceManager.GetTopic(path);
 
             description.Should().NotBeNull();
         }
@@ -70,11 +71,11 @@ namespace BusLite
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
             const string path = "test/topicupdate1";
-            TopicDescription originalDescripton = await namespaceManager.CreateTopic(path);
+            ITopicDescription originalDescripton = await namespaceManager.CreateTopic(path);
 
             originalDescripton.MaxSizeInMegabytes = originalDescripton.MaxSizeInMegabytes + 1;
 
-            TopicDescription updatedDescription = await namespaceManager.UpdateTopic(originalDescripton);
+            ITopicDescription updatedDescription = await namespaceManager.UpdateTopic(originalDescripton);
 
             updatedDescription.Should().NotBeNull();
             updatedDescription.GetHashCode().Should().NotBe(originalDescripton.GetHashCode());
