@@ -6,8 +6,6 @@
 
     public interface INamespaceManager
     {
-        Task<ITopicDescription> CreateTopic(string path);
-
         Task<ITopicDescription> CreateTopic(ITopicDescription description);
 
         Task DeleteTopic(string path);
@@ -19,5 +17,9 @@
         Task<bool> TopicExists(string path);
 
         Task<ITopicDescription> UpdateTopic(ITopicDescription description);
+
+        Task<bool> SubscriptionExists(string topicPath, string name);
+
+        Task<ISubscriptionDescription> CreateSubscription(ISubscriptionDescription description, IRuleDescription ruleDescription = null);
     }
 }

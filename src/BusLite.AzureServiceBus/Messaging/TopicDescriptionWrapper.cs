@@ -1,7 +1,7 @@
 ﻿namespace BusLite.AzureServiceBus.Messaging
 {
     using BusLite.Messaging;
-    using TopicDescription = Microsoft.ServiceBus.Messaging.TopicDescription;
+    using Microsoft.ServiceBus.Messaging;
 
     public class TopicDescriptionWrapper : ITopicDescription
     {

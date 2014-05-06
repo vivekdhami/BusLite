@@ -6,6 +6,7 @@ namespace BusLite.AzureServiceBus
     using BusLite.AzureServiceBus.Messaging;
     using BusLite.Messaging;
     using Microsoft.ServiceBus;
+    using Microsoft.ServiceBus.Messaging;
     using TopicDescription = Microsoft.ServiceBus.Messaging.TopicDescription;
 
     internal class NamespaceManagerWrapper : INamespaceManager
@@ -17,15 +18,9 @@ namespace BusLite.AzureServiceBus
             _namespaceManager = namespaceManager;
         }
 
-        public async Task<ITopicDescription> CreateTopic(string path)
-        {
-            TopicDescription description = await _namespaceManager.CreateTopicAsync(path);
-            return description.ToWrapper();
-        }
-
         public async Task<ITopicDescription> CreateTopic(ITopicDescription description)
         {
-            TopicDescription topicDescription = await _namespaceManager.CreateTopicAsync(description.ToAzureTopicDescription());
+            TopicDescription topicDescription = await _namespaceManager.CreateTopicAsync(description.ToAzureDescription());
             return topicDescription.ToWrapper();
         }
 
@@ -53,8 +48,21 @@ namespace BusLite.AzureServiceBus
 
         public async Task<ITopicDescription> UpdateTopic(ITopicDescription description)
         {
-            TopicDescription topicDescription = await _namespaceManager.UpdateTopicAsync(description.ToAzureTopicDescription());
+            TopicDescription topicDescription = await _namespaceManager.UpdateTopicAsync(description.ToAzureDescription());
             return topicDescription.ToWrapper();
+        }
+
+        public Task<bool> SubscriptionExists(string topicPath, string name)
+        {
+            return _namespaceManager.SubscriptionExistsAsync(topicPath, name);
+        }
+
+        public async Task<ISubscriptionDescription> CreateSubscription(ISubscriptionDescription description, IRuleDescription ruleDescription = null)
+        {
+            SubscriptionDescription subscriptionDescription = ruleDescription == null
+                ? await _namespaceManager.CreateSubscriptionAsync(description.ToAzureDescription())
+                : await _namespaceManager.CreateSubscriptionAsync(description.ToAzureDescription(), ruleDescription.ToAzureDescription());
+            return subscriptionDescription.ToWrapper();
         }
     }
 }

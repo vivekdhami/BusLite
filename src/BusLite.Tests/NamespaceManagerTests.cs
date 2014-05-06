@@ -81,6 +81,19 @@ namespace BusLite
             updatedDescription.GetHashCode().Should().NotBe(originalDescripton.GetHashCode());
         }
 
+        [Fact]
+        public async Task Can_subscribe_to_a_topic()
+        {
+            INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
+            const string path = "test/subscriptiontest";
+
+
+            if (!await namespaceManager.SubscriptionExists(path, "AllMessages"))
+            {
+                await namespaceManager.CreateSubscription(path, ruleDescription: "AllMessages");
+            }
+        }
+
         public void SetFixture(NamespaceManagerFactoryFixture data)
         {
             _fixture = data;

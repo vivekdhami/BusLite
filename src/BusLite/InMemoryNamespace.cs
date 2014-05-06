@@ -17,11 +17,6 @@
             return Task.FromResult(_topics.ContainsKey(path));
         }
 
-        public Task<ITopicDescription> CreateTopic(string path)
-        {
-            return CreateTopic(new BusLiteTopicDescription(path));
-        }
-
         public Task<ITopicDescription> CreateTopic(ITopicDescription description)
         {
             Topic topic = _topics.GetOrAdd(description.Path, _ => new Topic(description));
@@ -60,6 +55,16 @@
             
             topic.Description = new BusLiteTopicDescription(description);
             return Task.FromResult(topic.Description);
+        }
+
+        public Task<bool> SubscriptionExists(string topicPath, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ISubscriptionDescription> CreateSubscription(ISubscriptionDescription description, IRuleDescription ruleDescription = null)
+        {
+            throw new NotImplementedException();
         }
 
         private class Topic
