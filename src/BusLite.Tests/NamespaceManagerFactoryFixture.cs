@@ -8,9 +8,9 @@
 
         public NamespaceManagerFactoryFixture()
         {
-            ServiceBus serviceBus = new ServiceBus()
-                .WithNamespace("buslite");
-            _factory = new InMemoryNamespaceManagerFactory(serviceBus);
+            InMemoryServiceBus inMemoryServiceBus = new InMemoryServiceBus()
+                .WithNamespace("buslite.servicebus.windows.net");
+            _factory = new InMemoryNamespaceManagerFactory(inMemoryServiceBus);
         }
 
         public INamespaceManagerFactory Factory

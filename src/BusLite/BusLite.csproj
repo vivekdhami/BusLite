@@ -56,8 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InMemory\InMemoryNamespaceManager.cs" />
-    <Compile Include="ServiceBus.cs" />
+    <Compile Include="InMemory\InMemoryNamespace.cs" />
+    <Compile Include="InMemory\InMemoryServiceBus.cs" />
     <Compile Include="INamespaceManager.cs" />
     <Compile Include="INamespaceManagerFactory.cs" />
     <Compile Include="InMemory\InMemoryNamespaceManagerFactory.cs" />

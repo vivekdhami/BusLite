@@ -32,7 +32,7 @@ namespace BusLite.AzureServiceBus
 
         public Task<TopicDescription> GetTopic(string path)
         {
-            throw new NotImplementedException();
+            return _namespaceManager.GetTopicAsync(path);
         }
 
         public Task<IEnumerable<TopicDescription>> GetTopics(string filter = null)
