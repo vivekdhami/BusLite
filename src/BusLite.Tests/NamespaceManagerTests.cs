@@ -45,7 +45,7 @@ namespace BusLite
         }
 
         [Fact]
-        public Task When_topic_does_not_exist_and_get_topic_then_should_get_null()
+        public void When_topic_does_not_exist_and_get_topic_then_should_get_null()
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
             const string path = "test/doesnotexisttopic";
