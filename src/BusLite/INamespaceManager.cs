@@ -21,5 +21,9 @@
         Task<bool> SubscriptionExists(string topicPath, string name);
 
         Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null);
+
+        Task<IEnumerable<SubscriptionDescription>> GetSubscriptions(string topicPath, string filter = null);
+
+        Task DeleteSubscription(string topicPath, string name);
     }
 }

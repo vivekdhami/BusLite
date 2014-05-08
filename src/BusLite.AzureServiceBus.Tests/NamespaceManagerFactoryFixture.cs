@@ -28,17 +28,5 @@
             return _factory
                .CreateFromConnectionString(_azureCredentials);
         }
-
-        public INamespaceManager CreateNamespaceManagerThatDoesNotExist()
-        {
-            int i = _azureCredentials.IndexOf("//", StringComparison.Ordinal) + 2;
-            int j = _azureCredentials.IndexOf(".", i, StringComparison.Ordinal);
-
-            // This should result in something like "Endpoint=sb://shouldnotexistever.servicebus.windows.net/....."
-            var credentials = _azureCredentials.Replace(_azureCredentials.Substring(i, j - i), "shouldnotexistever");
-
-            Console.WriteLine(_azureCredentials.Substring(i, j-i));
-            return _factory.CreateFromConnectionString(credentials);
-        }
     }
 }

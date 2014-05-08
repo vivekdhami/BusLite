@@ -108,6 +108,10 @@ namespace BusLite
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
             foreach (var topic in await namespaceManager.GetTopics())
             {
+                foreach (var subscription in await namespaceManager.GetSubscriptions(topic.Path))
+                {
+                    await namespaceManager.DeleteSubscription(subscription.TopicPath, subscription.Name);
+                }
                 await namespaceManager.DeleteTopic(topic.Path);
             }
         }

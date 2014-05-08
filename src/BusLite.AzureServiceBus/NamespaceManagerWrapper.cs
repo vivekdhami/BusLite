@@ -50,12 +50,23 @@ namespace BusLite.AzureServiceBus
             return _namespaceManager.SubscriptionExistsAsync(topicPath, name);
         }
 
-        public async Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null)
+        public Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null)
         {
-            SubscriptionDescription subscriptionDescription = ruleDescription == null
-                ? await _namespaceManager.CreateSubscriptionAsync(description)
-                : await _namespaceManager.CreateSubscriptionAsync(description, ruleDescription);
-            return subscriptionDescription;
+           return ruleDescription == null
+                ? _namespaceManager.CreateSubscriptionAsync(description)
+                : _namespaceManager.CreateSubscriptionAsync(description, ruleDescription);
+        }
+
+        public Task<IEnumerable<SubscriptionDescription>> GetSubscriptions(string topicPath, string filter = null)
+        {
+           return filter == null
+                ? _namespaceManager.GetSubscriptionsAsync(topicPath)
+                : _namespaceManager.GetSubscriptionsAsync(topicPath, filter);
+        }
+
+        public Task DeleteSubscription(string topicPath, string name)
+        {
+            return _namespaceManager.DeleteSubscriptionAsync(topicPath, name);
         }
     }
 }
