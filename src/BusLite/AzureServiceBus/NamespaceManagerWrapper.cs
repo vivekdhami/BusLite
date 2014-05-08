@@ -4,7 +4,6 @@ namespace BusLite.AzureServiceBus
     using System.Threading.Tasks;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
-    using TopicDescription = Microsoft.ServiceBus.Messaging.TopicDescription;
 
     internal class NamespaceManagerWrapper : INamespaceManager
     {

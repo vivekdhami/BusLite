@@ -63,10 +63,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BusLite.AzureServiceBus\BusLite.AzureServiceBus.csproj">
-      <Project>{0ad8e16c-604f-408f-bb0c-4d6c68fb2e86}</Project>
-      <Name>BusLite.AzureServiceBus</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BusLite\BusLite.csproj">
       <Project>{74FDE78C-58D3-4AB4-BF3D-3D9D66B47A8D}</Project>
       <Name>BusLite</Name>

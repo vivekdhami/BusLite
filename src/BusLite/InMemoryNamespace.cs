@@ -9,24 +9,30 @@
 
     internal class InMemoryNamespace : INamespaceManager
     {
+        private readonly int _delayMilliseconds;
         private readonly ConcurrentDictionary<string, Topic> _topics = new ConcurrentDictionary<string, Topic>(StringComparer.OrdinalIgnoreCase);
+
+        public InMemoryNamespace(int delayMilliseconds)
+        {
+            _delayMilliseconds = delayMilliseconds;
+        }
 
         public Task<bool> TopicExists(string path)
         {
-            return Task.FromResult(_topics.ContainsKey(path));
+            return Return(_topics.ContainsKey(path));
         }
 
         public Task<TopicDescription> CreateTopic(TopicDescription description)
         {
             Topic topic = _topics.GetOrAdd(description.Path, _ => new Topic(description));
-            return Task.FromResult(topic.Description);
+            return Return(topic.Description);
         }
 
         public Task DeleteTopic(string path)
         {
             Topic _;
             _topics.TryRemove(path, out _);
-            return Task.FromResult(0);
+            return Return();
         }
 
         public Task<TopicDescription> GetTopic(string path)
@@ -34,14 +40,14 @@
             Topic topic;
             if (_topics.TryGetValue(path, out topic))
             {
-                return Task.FromResult(topic.Description);
+                return Return(topic.Description);
             }
             throw new MessagingEntityNotFoundException(path);
         }
 
         public Task<IEnumerable<TopicDescription>> GetTopics(string filter = null)
         {
-            return Task.FromResult(_topics.Values.Select(t => t.Description));
+            return Return(_topics.Values.Select(t => t.Description));
         }
 
         public Task<TopicDescription> UpdateTopic(TopicDescription description)
@@ -53,20 +59,20 @@
             }
             topic.Description = DataContractSerializerCache.Clone(description);
             topic.Description.Path = description.Path;
-            return Task.FromResult(topic.Description);
+            return Return(topic.Description);
         }
 
         public Task<bool> SubscriptionExists(string topicPath, string name)
         {
             Topic topic;
-            return Task.FromResult(_topics.TryGetValue(topicPath, out topic) && topic.SubscriptionExists(name));
+            return Return(_topics.TryGetValue(topicPath, out topic) && topic.SubscriptionExists(name));
         }
 
         public Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null)
         {
             Topic topic = _topics[description.TopicPath];
             Subscription subscription = topic.CreateSubscription(description, ruleDescription);
-            return Task.FromResult(subscription.Description);
+            return Return(subscription.Description);
         }
 
         public Task<IEnumerable<SubscriptionDescription>> GetSubscriptions(string topicPath, string filter = null)
@@ -75,7 +81,7 @@
                 .Values
                 .SelectMany(t => t.GetSubscriptions())
                 .Select(s => s.Description);
-            return Task.FromResult(subscriptions);
+            return Return(subscriptions);
         }
 
         public Task DeleteSubscription(string topicPath, string name)
@@ -85,7 +91,18 @@
             {
                 topic.DeleteSubscription(name);
             }
-            return Task.FromResult(0);
+            return Return();
+        }
+
+        private Task Return()
+        {
+            return Task.Delay(_delayMilliseconds);
+        }
+
+        private async Task<T> Return<T>(T result)
+        {
+            await Task.Delay(_delayMilliseconds);
+            return result;
         }
 
         private class Topic
