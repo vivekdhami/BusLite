@@ -10,9 +10,9 @@ namespace BusLite
     using Microsoft.ServiceBus.Messaging;
     using Xunit;
 
-    public class NamespaceManagerTests : IUseFixture<NamespaceManagerFactoryFixture>, IDisposable
+    public abstract class NamespaceManagerTestsBase<T> : IUseFixture<T>, IDisposable where T : NamespaceManagerFactoryFixture, new()
     {
-        private NamespaceManagerFactoryFixture _fixture;
+        private T _fixture;
 
         [Fact]
         public async Task Can_check_if_topic_exists()
@@ -93,7 +93,7 @@ namespace BusLite
             }
         }
 
-        public void SetFixture(NamespaceManagerFactoryFixture data)
+        public void SetFixture(T data)
         {
             _fixture = data;
         }
@@ -116,4 +116,10 @@ namespace BusLite
             }
         }
     }
+
+    public class BusLiteNamespaceManagerTests : NamespaceManagerTestsBase<BusLiteNamespaceManagerFactoryFixture>
+    {}
+
+    public class AzureNamespaceManagerTests : NamespaceManagerTestsBase<AzureNamespaceManagerFactoryFixture>
+    {}
 }

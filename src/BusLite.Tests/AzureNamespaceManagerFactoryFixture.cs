@@ -1,14 +1,15 @@
-﻿namespace BusLite.AzureServiceBus
+﻿namespace BusLite
 {
     using System;
+    using BusLite.AzureServiceBus;
     using Microsoft.WindowsAzure;
 
-    public class NamespaceManagerFactoryFixture
+    public class AzureNamespaceManagerFactoryFixture : NamespaceManagerFactoryFixture
     {
         private readonly INamespaceManagerFactory _factory;
         private readonly string _azureCredentials;
 
-        public NamespaceManagerFactoryFixture()
+        public AzureNamespaceManagerFactoryFixture()
         {
             _factory = new AzureServiceBusNamespaceManagerFactory();
             _azureCredentials = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
@@ -18,12 +19,12 @@
             }
         }
 
-        public INamespaceManagerFactory Factory
+        public override INamespaceManagerFactory Factory
         {
             get { return _factory; }
         }
 
-        public INamespaceManager CreateNamespaceManager()
+        public override INamespaceManager CreateNamespaceManager()
         {
             return _factory
                .CreateFromConnectionString(_azureCredentials);
