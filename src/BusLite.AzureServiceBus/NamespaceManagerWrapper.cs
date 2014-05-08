@@ -1,10 +1,7 @@
 namespace BusLite.AzureServiceBus
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using BusLite.AzureServiceBus.Messaging;
-    using BusLite.Messaging;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
     using TopicDescription = Microsoft.ServiceBus.Messaging.TopicDescription;
@@ -18,10 +15,9 @@ namespace BusLite.AzureServiceBus
             _namespaceManager = namespaceManager;
         }
 
-        public async Task<ITopicDescription> CreateTopic(ITopicDescription description)
+        public Task<TopicDescription> CreateTopic(TopicDescription description)
         {
-            TopicDescription topicDescription = await _namespaceManager.CreateTopicAsync(description.ToAzureDescription());
-            return topicDescription.ToWrapper();
+            return _namespaceManager.CreateTopicAsync(description);
         }
 
         public Task DeleteTopic(string path)
@@ -29,16 +25,14 @@ namespace BusLite.AzureServiceBus
             return _namespaceManager.DeleteTopicAsync(path);
         }
 
-        public async Task<ITopicDescription> GetTopic(string path)
+        public Task<TopicDescription> GetTopic(string path)
         {
-            TopicDescription description = await _namespaceManager.GetTopicAsync(path);
-            return description.ToWrapper();
+            return _namespaceManager.GetTopicAsync(path);
         }
 
-        public async Task<IEnumerable<ITopicDescription>> GetTopics(string filter = null)
+        public Task<IEnumerable<TopicDescription>> GetTopics(string filter = null)
         {
-            IEnumerable<TopicDescription> topicDescriptions = await _namespaceManager.GetTopicsAsync(filter);
-            return topicDescriptions.Select(t => t.ToWrapper());
+            return _namespaceManager.GetTopicsAsync(filter);
         }
 
         public Task<bool> TopicExists(string path)
@@ -46,10 +40,9 @@ namespace BusLite.AzureServiceBus
             return _namespaceManager.TopicExistsAsync(path);
         }
 
-        public async Task<ITopicDescription> UpdateTopic(ITopicDescription description)
+        public async Task<TopicDescription> UpdateTopic(TopicDescription description)
         {
-            TopicDescription topicDescription = await _namespaceManager.UpdateTopicAsync(description.ToAzureDescription());
-            return topicDescription.ToWrapper();
+            return await _namespaceManager.UpdateTopicAsync(description);
         }
 
         public Task<bool> SubscriptionExists(string topicPath, string name)
@@ -57,12 +50,12 @@ namespace BusLite.AzureServiceBus
             return _namespaceManager.SubscriptionExistsAsync(topicPath, name);
         }
 
-        public async Task<ISubscriptionDescription> CreateSubscription(ISubscriptionDescription description, IRuleDescription ruleDescription = null)
+        public async Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null)
         {
             SubscriptionDescription subscriptionDescription = ruleDescription == null
-                ? await _namespaceManager.CreateSubscriptionAsync(description.ToAzureDescription())
-                : await _namespaceManager.CreateSubscriptionAsync(description.ToAzureDescription(), ruleDescription.ToAzureDescription());
-            return subscriptionDescription.ToWrapper();
+                ? await _namespaceManager.CreateSubscriptionAsync(description)
+                : await _namespaceManager.CreateSubscriptionAsync(description, ruleDescription);
+            return subscriptionDescription;
         }
     }
 }

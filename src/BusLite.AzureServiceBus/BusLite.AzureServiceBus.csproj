@@ -45,10 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureServiceBusNamespaceManagerFactory.cs" />
-    <Compile Include="Messaging\RuleDescriptionWrapper.cs" />
-    <Compile Include="Messaging\SubscriptionDescriptionWrapper.cs" />
-    <Compile Include="Messaging\Extensions.cs" />
-    <Compile Include="Messaging\TopicDescriptionWrapper.cs" />
     <Compile Include="NamespaceManagerWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

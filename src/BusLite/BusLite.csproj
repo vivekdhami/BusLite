@@ -56,15 +56,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataContractSerializerCache.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="InMemoryNamespace.cs" />
     <Compile Include="InMemoryServiceBus.cs" />
     <Compile Include="INamespaceManager.cs" />
     <Compile Include="INamespaceManagerFactory.cs" />
     <Compile Include="InMemoryNamespaceManagerFactory.cs" />
-    <Compile Include="Messaging\IRuleDescription.cs" />
-    <Compile Include="Messaging\ISubscriptionDescription.cs" />
-    <Compile Include="Messaging\ITopicDescription.cs" />
-    <Compile Include="Messaging\BusLiteTopicDescription.cs" />
     <Compile Include="NamespaceManagerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

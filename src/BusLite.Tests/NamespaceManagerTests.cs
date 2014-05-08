@@ -6,7 +6,6 @@ namespace BusLite
 {
     using System;
     using System.Threading.Tasks;
-    using BusLite.Messaging;
     using FluentAssertions;
     using Microsoft.ServiceBus.Messaging;
     using Xunit;
@@ -27,7 +26,7 @@ namespace BusLite
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
             const string path = "test/createtopic";
-            ITopicDescription description = await namespaceManager.CreateTopic(path);
+            TopicDescription description = await namespaceManager.CreateTopic(path);
 
             description.Path.Should().Be(path);
         }
@@ -62,20 +61,21 @@ namespace BusLite
             const string path = "test/topicexists";
             await namespaceManager.CreateTopic(path);
 
-            ITopicDescription description = await namespaceManager.GetTopic(path);
+            TopicDescription description = await namespaceManager.GetTopic(path);
 
             description.Should().NotBeNull();
         }
+
         [Fact]
         public async Task Can_update_topic()
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
-            const string path = "test/topicupdate1";
-            ITopicDescription originalDescripton = await namespaceManager.CreateTopic(path);
+            const string topicPath = "test/topicupdate1";
+            TopicDescription originalDescripton = await namespaceManager.CreateTopic(topicPath);
 
             originalDescripton.MaxSizeInMegabytes = originalDescripton.MaxSizeInMegabytes + 1;
 
-            ITopicDescription updatedDescription = await namespaceManager.UpdateTopic(originalDescripton);
+            TopicDescription updatedDescription = await namespaceManager.UpdateTopic(originalDescripton);
 
             updatedDescription.Should().NotBeNull();
             updatedDescription.GetHashCode().Should().NotBe(originalDescripton.GetHashCode());
@@ -85,12 +85,11 @@ namespace BusLite
         public async Task Can_subscribe_to_a_topic()
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
-            const string path = "test/subscriptiontest";
-
-
-            if (!await namespaceManager.SubscriptionExists(path, "AllMessages"))
+            const string topicPath = "test/subscriptiontest";
+            await namespaceManager.CreateTopic(topicPath);
+            if (!await namespaceManager.SubscriptionExists(topicPath, "AllMessages"))
             {
-                await namespaceManager.CreateSubscription(path, "AllMessages");
+                var subscriptionDescription = await namespaceManager.CreateSubscription(topicPath, "AllMessages");
             }
         }
 

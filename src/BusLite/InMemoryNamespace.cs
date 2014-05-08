@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using BusLite.Messaging;
     using Microsoft.ServiceBus.Messaging;
 
     internal class InMemoryNamespace : INamespaceManager
@@ -17,7 +16,7 @@
             return Task.FromResult(_topics.ContainsKey(path));
         }
 
-        public Task<ITopicDescription> CreateTopic(ITopicDescription description)
+        public Task<TopicDescription> CreateTopic(TopicDescription description)
         {
             Topic topic = _topics.GetOrAdd(description.Path, _ => new Topic(description));
             return Task.FromResult(topic.Description);
@@ -30,7 +29,7 @@
             return Task.FromResult(0);
         }
 
-        public Task<ITopicDescription> GetTopic(string path)
+        public Task<TopicDescription> GetTopic(string path)
         {
             Topic topic;
             if (_topics.TryGetValue(path, out topic))
@@ -40,20 +39,20 @@
             throw new MessagingEntityNotFoundException(path);
         }
 
-        public Task<IEnumerable<ITopicDescription>> GetTopics(string filter = null)
+        public Task<IEnumerable<TopicDescription>> GetTopics(string filter = null)
         {
             return Task.FromResult(_topics.Values.Select(t => t.Description));
         }
 
-        public Task<ITopicDescription> UpdateTopic(ITopicDescription description)
+        public Task<TopicDescription> UpdateTopic(TopicDescription description)
         {
             Topic topic;
             if (!_topics.TryGetValue(description.Path, out topic))
             {
                 throw new ArgumentException("Topic does not exist");
             }
-            
-            topic.Description = new BusLiteTopicDescription(description);
+            topic.Description = DataContractSerializerCache.Clone(description);
+            topic.Description.Path = description.Path;
             return Task.FromResult(topic.Description);
         }
 
@@ -62,21 +61,21 @@
             throw new NotImplementedException();
         }
 
-        public Task<ISubscriptionDescription> CreateSubscription(ISubscriptionDescription description, IRuleDescription ruleDescription = null)
+        public Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null)
         {
             throw new NotImplementedException();
         }
 
         private class Topic
         {
-            private ITopicDescription _topicDescription;
+            private TopicDescription _topicDescription;
 
-            public Topic(ITopicDescription topicDescription)
+            public Topic(TopicDescription topicDescription)
             {
                 _topicDescription = topicDescription;
             }
 
-            public ITopicDescription Description
+            public TopicDescription Description
             {
                 get { return _topicDescription; }
                 set { _topicDescription = value; }

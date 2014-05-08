@@ -2,24 +2,24 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using BusLite.Messaging;
+    using Microsoft.ServiceBus.Messaging;
 
     public interface INamespaceManager
     {
-        Task<ITopicDescription> CreateTopic(ITopicDescription description);
+        Task<TopicDescription> CreateTopic(TopicDescription description);
 
         Task DeleteTopic(string path);
 
-        Task<ITopicDescription> GetTopic(string path);
+        Task<TopicDescription> GetTopic(string path);
 
-        Task<IEnumerable<ITopicDescription>> GetTopics(string filter = null);
+        Task<IEnumerable<TopicDescription>> GetTopics(string filter = null);
 
         Task<bool> TopicExists(string path);
 
-        Task<ITopicDescription> UpdateTopic(ITopicDescription description);
+        Task<TopicDescription> UpdateTopic(TopicDescription description);
 
         Task<bool> SubscriptionExists(string topicPath, string name);
 
-        Task<ISubscriptionDescription> CreateSubscription(ISubscriptionDescription description, IRuleDescription ruleDescription = null);
+        Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null);
     }
 }
