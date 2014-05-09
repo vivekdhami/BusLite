@@ -1,4 +1,4 @@
-﻿namespace BusLite
+﻿namespace BusLite.Performance
 {
     using System;
     using System.Collections.Concurrent;

@@ -57,14 +57,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureServiceBus\AzureServiceBusNamespaceManagerFactory.cs" />
+    <Compile Include="AzureServiceBus\AzureServiceBusTopicClientFactory.cs" />
     <Compile Include="AzureServiceBus\NamespaceManagerWrapper.cs" />
-    <Compile Include="DataContractSerializerCache.cs" />
-    <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="InMemoryNamespace.cs" />
-    <Compile Include="InMemoryServiceBus.cs" />
+    <Compile Include="AzureServiceBus\TopicClientWrapper.cs" />
+    <Compile Include="Performance\DataContractSerializerCache.cs" />
+    <Compile Include="ITopicClient.cs" />
+    <Compile Include="ITopicClientFactory.cs" />
+    <Compile Include="Performance\ObjectExtensions.cs" />
+    <Compile Include="InMemory\InMemoryNamespace.cs" />
+    <Compile Include="InMemory\InMemoryServiceBus.cs" />
     <Compile Include="INamespaceManager.cs" />
     <Compile Include="INamespaceManagerFactory.cs" />
-    <Compile Include="InMemoryNamespaceManagerFactory.cs" />
+    <Compile Include="InMemory\InMemoryNamespaceManagerFactory.cs" />
     <Compile Include="NamespaceManagerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,7 +77,9 @@
     <None Include="packages.config" />
     <None Include="Performance\Microsoft.ServiceBus.MessagingPerformanceCounters.man" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -11,7 +11,7 @@
 
         public AzureNamespaceManagerFactoryFixture()
         {
-            _factory = new AzureServiceBusNamespaceManagerFactory();
+            _factory = new AzureServiceBus.AzureServiceBusNamespaceManagerFactory();
             _azureCredentials = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
             if (_azureCredentials.Contains("[your namespace]"))
             {

@@ -1,5 +1,7 @@
 ﻿namespace BusLite
 {
+    using BusLite.InMemory;
+
     public class BusLiteNamespaceManagerFactoryFixture : NamespaceManagerFactoryFixture
     {
         private readonly INamespaceManagerFactory _factory;

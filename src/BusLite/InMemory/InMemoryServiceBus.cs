@@ -1,4 +1,4 @@
-﻿namespace BusLite
+﻿namespace BusLite.InMemory
 {
     using System;
     using System.Collections.Generic;

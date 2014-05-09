@@ -1,10 +1,11 @@
-﻿namespace BusLite
+﻿namespace BusLite.InMemory
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using BusLite.Performance;
     using Microsoft.ServiceBus.Messaging;
 
     internal class InMemoryNamespace : INamespaceManager
