@@ -6,7 +6,7 @@
     using Microsoft.ServiceBus.Messaging;
     using Xunit;
 
-    public abstract class NamespaceManagerTestsBase<T> : IUseFixture<T>, IDisposable where T : NamespaceManagerFactoryFixture, new()
+    public abstract class TopicTestsBase<T> : IUseFixture<T>, IDisposable where T : NamespaceManagerFactoryFixture, new()
     {
         private T _fixture;
 
@@ -87,6 +87,9 @@
             {
                 var subscriptionDescription = await namespaceManager.CreateSubscription(topicPath, "AllMessages");
             }
+
+            ITopicClient client = _fixture.CreateTopicClient(topicPath);
+            await client.Send(new BrokeredMessage());
         }
 
         public void SetFixture(T data)
@@ -113,9 +116,9 @@
         }
     }
 
-    public class BusLiteNamespaceManagerTests : NamespaceManagerTestsBase<BusLiteNamespaceManagerFactoryFixture>
+    public class BusLiteTopicTests : TopicTestsBase<BusLiteNamespaceManagerFactoryFixture>
     {}
 
-    public class AzureNamespaceManagerTests : NamespaceManagerTestsBase<AzureNamespaceManagerFactoryFixture>
+    public class AzureTopicTests : TopicTestsBase<AzureNamespaceManagerFactoryFixture>
     {}
 }

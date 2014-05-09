@@ -2,6 +2,6 @@
 {
     public interface ITopicClientFactory
     {
-        ITopicClient CreateFromConnectionString(string connectionString, string topicPath);
+        ITopicClient CreateFromConnectionString(string connectionString, string path);
     }
 }

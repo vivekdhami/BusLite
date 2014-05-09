@@ -5,5 +5,7 @@
         public abstract INamespaceManagerFactory Factory { get; }
 
         public abstract INamespaceManager CreateNamespaceManager();
+
+        public abstract ITopicClient CreateTopicClient(string path);
     }
 }

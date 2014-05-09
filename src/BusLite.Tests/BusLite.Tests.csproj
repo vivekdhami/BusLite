@@ -58,7 +58,7 @@
     <Compile Include="AzureNamespaceManagerFactoryFixture.cs" />
     <Compile Include="BusLiteNamespaceManagerFactoryFixture.cs" />
     <Compile Include="NamespaceManagerFactoryFixture.cs" />
-    <Compile Include="NamespaceManagerTestsBase.cs" />
+    <Compile Include="TopicTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
