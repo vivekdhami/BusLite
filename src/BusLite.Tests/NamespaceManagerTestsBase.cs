@@ -1,8 +1,4 @@
-﻿#if AZURE
-namespace BusLite.AzureServiceBus
-#else
-namespace BusLite
-#endif
+﻿namespace BusLite
 {
     using System;
     using System.Threading.Tasks;
