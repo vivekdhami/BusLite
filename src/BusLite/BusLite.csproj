@@ -57,13 +57,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureServiceBus\AzureServiceBusNamespaceManagerFactory.cs" />
+    <Compile Include="AzureServiceBus\AzureServiceBusSubscriptionClientFactory.cs" />
     <Compile Include="AzureServiceBus\AzureServiceBusTopicClientFactory.cs" />
+    <Compile Include="AzureServiceBus\SubcriptionClientWrapper.cs" />
+    <Compile Include="InMemory\InMemorySubscriptionClient.cs" />
+    <Compile Include="InMemory\InMemorySubscriptionClientFactory.cs" />
+    <Compile Include="ISubscriptionClient.cs" />
     <Compile Include="AzureServiceBus\NamespaceManagerWrapper.cs" />
     <Compile Include="AzureServiceBus\TopicClientWrapper.cs" />
     <Compile Include="Helpers\ConnectionString.cs" />
     <Compile Include="InMemory\InMemoryTopicClient.cs" />
     <Compile Include="InMemory\InMemoryTopicClientFactory.cs" />
     <Compile Include="Helpers\DataContractSerializerCache.cs" />
+    <Compile Include="ISubscriptionClientFactory.cs" />
     <Compile Include="ITopicClient.cs" />
     <Compile Include="ITopicClientFactory.cs" />
     <Compile Include="Helpers\ObjectExtensions.cs" />

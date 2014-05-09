@@ -7,5 +7,7 @@
         public abstract INamespaceManager CreateNamespaceManager();
 
         public abstract ITopicClient CreateTopicClient(string path);
+
+        public abstract ISubscriptionClient CreateSubscriptionClient(string path, string name);
     }
 }

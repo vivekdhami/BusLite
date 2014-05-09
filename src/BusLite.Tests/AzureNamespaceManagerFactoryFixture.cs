@@ -7,13 +7,15 @@
     public class AzureNamespaceManagerFactoryFixture : NamespaceManagerFactoryFixture
     {
         private readonly INamespaceManagerFactory _namespaceManagerFactory;
-        private readonly string _connectionString;
         private readonly ITopicClientFactory _topicClientFactory;
+        private readonly ISubscriptionClientFactory _subscriptionClientFactory;
+        private readonly string _connectionString;
 
         public AzureNamespaceManagerFactoryFixture()
         {
             _namespaceManagerFactory = new AzureServiceBusNamespaceManagerFactory();
             _topicClientFactory = new AzureServiceBusTopicClientFactory();
+            _subscriptionClientFactory = new AzureServiceBusSubscriptionClientFactory();
             _connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
             if (_connectionString.Contains("[your namespace]"))
             {
@@ -36,6 +38,12 @@
         {
             return _topicClientFactory
                 .CreateFromConnectionString(_connectionString, path);
+        }
+
+        public override ISubscriptionClient CreateSubscriptionClient(string path, string name)
+        {
+            return _subscriptionClientFactory
+                .CreateFromConnectionString(_connectionString, path, name);
         }
     }
 }

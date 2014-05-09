@@ -82,14 +82,19 @@
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
             const string topicPath = "test/subscriptiontest";
+            const string subscriptionName = "AllMessages";
             await namespaceManager.CreateTopic(topicPath);
-            if (!await namespaceManager.SubscriptionExists(topicPath, "AllMessages"))
+            if (!await namespaceManager.SubscriptionExists(topicPath, subscriptionName))
             {
-                var subscriptionDescription = await namespaceManager.CreateSubscription(topicPath, "AllMessages");
+                var subscriptionDescription = await namespaceManager.CreateSubscription(topicPath, subscriptionName);
             }
 
-            ITopicClient client = _fixture.CreateTopicClient(topicPath);
-            await client.Send(new BrokeredMessage());
+            ITopicClient topicClient = _fixture.CreateTopicClient(topicPath);
+            await topicClient.Send(new BrokeredMessage());
+
+            ISubscriptionClient subscriptionClient = _fixture.CreateSubscriptionClient(topicPath, subscriptionName);
+            BrokeredMessage brokeredMessage = await subscriptionClient.Receive();
+            await brokeredMessage.CompleteAsync();
         }
 
         public void SetFixture(T data)
