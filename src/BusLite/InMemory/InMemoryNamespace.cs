@@ -5,13 +5,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using BusLite.Performance;
+    using BusLite.Helpers;
     using Microsoft.ServiceBus.Messaging;
 
     internal class InMemoryNamespace : INamespaceManager
     {
         private readonly int _delayMilliseconds;
-        private readonly ConcurrentDictionary<string, Topic> _topics = new ConcurrentDictionary<string, Topic>(StringComparer.OrdinalIgnoreCase);
+
+        private readonly ConcurrentDictionary<string, Topic> _topics =
+            new ConcurrentDictionary<string, Topic>(StringComparer.OrdinalIgnoreCase);
 
         public InMemoryNamespace(int delayMilliseconds)
         {
@@ -25,7 +27,7 @@
 
         public Task<TopicDescription> CreateTopic(TopicDescription description)
         {
-            Topic topic = _topics.GetOrAdd(description.Path, _ => new Topic(description));
+            Topic topic = _topics.GetOrAdd(description.Path, _ => new Topic(description, _delayMilliseconds));
             return Return(topic.Description);
         }
 
@@ -69,7 +71,8 @@
             return Return(_topics.TryGetValue(topicPath, out topic) && topic.SubscriptionExists(name));
         }
 
-        public Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription = null)
+        public Task<SubscriptionDescription> CreateSubscription(SubscriptionDescription description,
+            RuleDescription ruleDescription = null)
         {
             Topic topic = _topics[description.TopicPath];
             Subscription subscription = topic.CreateSubscription(description, ruleDescription);
@@ -106,64 +109,16 @@
             return result;
         }
 
-        private class Topic
+        internal InMemoryTopicClient GetInMemoryTopicClient(string topicPath)
         {
-            private TopicDescription _topicDescription;
-            private readonly ConcurrentDictionary<string, Subscription> _subscriptions = new ConcurrentDictionary<string, Subscription>(); 
-
-            public Topic(TopicDescription topicDescription)
-            {
-                _topicDescription = topicDescription;
-            }
-
-            public TopicDescription Description
-            {
-                get { return _topicDescription; }
-                set { _topicDescription = value; }
-            }
-
-            public Subscription CreateSubscription(SubscriptionDescription description, RuleDescription ruleDescription)
-            {
-                return _subscriptions.GetOrAdd(description.Name, s => new Subscription(description, ruleDescription));
-            }
-
-            public bool SubscriptionExists(string name)
-            {
-                return _subscriptions.ContainsKey(name);
-            }
-
-            public IEnumerable<Subscription> GetSubscriptions()
-            {
-                return _subscriptions.Values.ToArray();
-            }
-
-            public void DeleteSubscription(string name)
-            {
-                Subscription _;
-                _subscriptions.TryRemove(name, out _);
-            }
+            Topic topic = _topics[topicPath];
+            return topic.GetTopicClient();
         }
 
-        private class Subscription
+        internal InMemorySubscriptionClient CreateSubscriptionClient(string topicPath, string name)
         {
-            private readonly SubscriptionDescription _description;
-            private readonly RuleDescription _ruleDescription;
-
-            public Subscription(SubscriptionDescription description, RuleDescription ruleDescription)
-            {
-                _description = description;
-                _ruleDescription = ruleDescription;
-            }
-
-            public SubscriptionDescription Description
-            {
-                get { return _description; }
-            }
-
-            public RuleDescription RuleDescription
-            {
-                get { return _ruleDescription; }
-            }
+            Topic topic = _topics[topicPath];
+            return topic.GetSubscriptionClient(name);
         }
     }
 }

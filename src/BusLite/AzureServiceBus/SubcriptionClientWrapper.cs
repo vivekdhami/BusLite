@@ -1,5 +1,6 @@
 ﻿namespace BusLite.AzureServiceBus
 {
+    using System;
     using System.Threading.Tasks;
     using Microsoft.ServiceBus.Messaging;
 
@@ -15,6 +16,11 @@
         public Task<BrokeredMessage> Receive()
         {
             return _inner.ReceiveAsync();
+        }
+
+        public Task<BrokeredMessage> Receive(TimeSpan serverWaitTime)
+        {
+            return _inner.ReceiveAsync(serverWaitTime);
         }
     }
 }

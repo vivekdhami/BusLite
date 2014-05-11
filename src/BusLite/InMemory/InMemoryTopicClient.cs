@@ -1,18 +1,20 @@
 namespace BusLite.InMemory
 {
-    using System;
     using System.Threading.Tasks;
     using Microsoft.ServiceBus.Messaging;
 
-    public class InMemoryTopicClient : ITopicClient
+    internal class InMemoryTopicClient : ITopicClient
     {
-        public InMemoryTopicClient()
+        private readonly Topic _topic;
+
+        public InMemoryTopicClient(Topic topic)
         {
+            _topic = topic;
         }
 
         public Task Send(BrokeredMessage message)
         {
-            throw new NotImplementedException();
+            return _topic.Send(message);
         }
     }
 }

@@ -15,8 +15,8 @@ namespace BusLite.InMemory
         public ITopicClient CreateFromConnectionString(string connectionString, string topicPath)
         {
             Uri uri = ConnectionString.GetUri(connectionString);
-            INamespaceManager namespaceManager = _inMemoryServiceBus.GetNamespaceManager(uri.Host);
-            return new InMemoryTopicClient();
+            InMemoryNamespace namespaceManager = _inMemoryServiceBus.GetNamespaceManager(uri.Host);
+            return namespaceManager.GetInMemoryTopicClient(topicPath);
         }
     }
 }

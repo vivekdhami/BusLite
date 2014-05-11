@@ -82,19 +82,30 @@
         {
             INamespaceManager namespaceManager = _fixture.CreateNamespaceManager();
             const string topicPath = "test/subscriptiontest";
-            const string subscriptionName = "AllMessages";
+            const string subscriptionName1 = "sub1";
+            const string subscriptionName2 = "sub2";
             await namespaceManager.CreateTopic(topicPath);
-            if (!await namespaceManager.SubscriptionExists(topicPath, subscriptionName))
+            if (!await namespaceManager.SubscriptionExists(topicPath, subscriptionName1))
             {
-                var subscriptionDescription = await namespaceManager.CreateSubscription(topicPath, subscriptionName);
+                await namespaceManager.CreateSubscription(topicPath, subscriptionName1);
+            }
+
+            if (!await namespaceManager.SubscriptionExists(topicPath, subscriptionName2))
+            {
+                await namespaceManager.CreateSubscription(topicPath, subscriptionName2);
             }
 
             ITopicClient topicClient = _fixture.CreateTopicClient(topicPath);
             await topicClient.Send(new BrokeredMessage());
 
-            ISubscriptionClient subscriptionClient = _fixture.CreateSubscriptionClient(topicPath, subscriptionName);
-            BrokeredMessage brokeredMessage = await subscriptionClient.Receive();
+            ISubscriptionClient subscriptionClient1 = _fixture.CreateSubscriptionClient(topicPath, subscriptionName1);
+            BrokeredMessage brokeredMessage = await subscriptionClient1.Receive(TimeSpan.FromSeconds(5));
+
             await brokeredMessage.CompleteAsync();
+
+            ISubscriptionClient subscriptionClient2 = _fixture.CreateSubscriptionClient(topicPath, subscriptionName2);
+            BrokeredMessage brokeredMessage2 = await subscriptionClient2.Receive(TimeSpan.FromSeconds(5));
+            await brokeredMessage2.CompleteAsync();
         }
 
         public void SetFixture(T data)

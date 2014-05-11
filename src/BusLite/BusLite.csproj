@@ -62,6 +62,8 @@
     <Compile Include="AzureServiceBus\SubcriptionClientWrapper.cs" />
     <Compile Include="InMemory\InMemorySubscriptionClient.cs" />
     <Compile Include="InMemory\InMemorySubscriptionClientFactory.cs" />
+    <Compile Include="InMemory\Subscription.cs" />
+    <Compile Include="InMemory\Topic.cs" />
     <Compile Include="ISubscriptionClient.cs" />
     <Compile Include="AzureServiceBus\NamespaceManagerWrapper.cs" />
     <Compile Include="AzureServiceBus\TopicClientWrapper.cs" />

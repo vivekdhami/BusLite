@@ -6,11 +6,18 @@
     public class InMemoryServiceBus
     {
         private readonly int _delayMilliseconds;
-        private readonly Dictionary<string, InMemoryNamespace> _namespaces = new Dictionary<string, InMemoryNamespace>(StringComparer.OrdinalIgnoreCase);
+
+        private readonly Dictionary<string, InMemoryNamespace> _namespaces =
+            new Dictionary<string, InMemoryNamespace>(StringComparer.OrdinalIgnoreCase);
 
         public InMemoryServiceBus(int delayMilliseconds = 1)
         {
             _delayMilliseconds = delayMilliseconds;
+        }
+
+        public int DelayMilliseconds
+        {
+            get { return _delayMilliseconds; }
         }
 
         public InMemoryServiceBus WithNamespace(string @namespace)
@@ -19,7 +26,7 @@
             return this;
         }
 
-        public INamespaceManager GetNamespaceManager(string @namespace)
+        internal InMemoryNamespace GetNamespaceManager(string @namespace)
         {
             return _namespaces[@namespace];
         }

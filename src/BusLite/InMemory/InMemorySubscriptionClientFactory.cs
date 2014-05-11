@@ -15,8 +15,9 @@ namespace BusLite.InMemory
         public ISubscriptionClient CreateFromConnectionString(string connectionString, string topicPath, string name)
         {
             Uri uri = ConnectionString.GetUri(connectionString);
-            INamespaceManager namespaceManager = _inMemoryServiceBus.GetNamespaceManager(uri.Host);
-            return new InMemorySubscriptionClient();
+            InMemoryNamespace namespaceManager = _inMemoryServiceBus.GetNamespaceManager(uri.Host);
+
+            return namespaceManager.CreateSubscriptionClient(topicPath, name);
         }
     }
 }

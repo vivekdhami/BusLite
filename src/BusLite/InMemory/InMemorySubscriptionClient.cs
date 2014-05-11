@@ -4,11 +4,27 @@ namespace BusLite.InMemory
     using System.Threading.Tasks;
     using Microsoft.ServiceBus.Messaging;
 
-    public class InMemorySubscriptionClient : ISubscriptionClient
+    internal class InMemorySubscriptionClient : ISubscriptionClient
     {
-        public Task<BrokeredMessage> Receive()
+        private readonly Subscription _subscription;
+        private readonly int _delay;
+
+        internal InMemorySubscriptionClient(Subscription subscription, int delay)
         {
-            throw new NotImplementedException();
+            _subscription = subscription;
+            _delay = delay;
+        }
+
+        public async Task<BrokeredMessage> Receive()
+        {
+            await Task.Delay(_delay);
+            return _subscription.Receive();
+        }
+
+        public async Task<BrokeredMessage> Receive(TimeSpan serverWaitTime)
+        {
+            await Task.Delay(_delay);
+            return _subscription.Receive(serverWaitTime);
         }
     }
 }
